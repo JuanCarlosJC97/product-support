@@ -369,10 +369,41 @@ export default function SupportProduct(props) {
                 show={showAdd}
                 onHide={() => setShowAdd(false)}
             />
-            <FormModalProductUpdate
-                show={showUpdate}
-                onHide={() => setShowUpdate(false)}
-            />
+            <Modal show={showUpdate} onHide={() => setShowUpdate(false)}>
+                <Modal.Header closeButton>
+                    <h1>Modificar Producto</h1>
+                </Modal.Header>
+                <Modal.Body>
+                    <>
+                        <FormLabel> Código de barras *</FormLabel>
+                        <FormControl id="codeUpdate" name="code" value={datosSel && datosSel.code} onChange={handleChange} />
+
+                        <FormLabel> Nombre *</FormLabel>
+                        <FormControl id="nameUpdate" name="name" value={datosSel && datosSel.name} onChange={handleChange} />
+
+                        <FormLabel> Cantidad actual *</FormLabel>
+                        <FormControl id="qtyUpdate" name="qty" type="number" value={datosSel && datosSel.qty} onChange={handleChange} />
+
+                        <FormLabel> Precio público *</FormLabel>
+                        <FormControl id="priceUpdate" name="price" type="number" value={datosSel && datosSel.price} onChange={handleChange} />
+
+                        <FormLabel> Precio real *</FormLabel>
+                        <FormControl id="realPriceUpdate" name="realPrice" type="number" value={datosSel && datosSel.realPrice} onChange={handleChange} />
+
+                        <FormLabel> Marca *</FormLabel>
+                        <FormControl id="marcaUpdate" name="marca" value={datosSel && datosSel.marca} onChange={handleChange} />
+
+                        <FormLabel> Tipo *</FormLabel>
+                        <FormControl id="typeUpdate" name="type" value={datosSel && datosSel.type} onChange={handleChange} />
+                    </>
+                </Modal.Body>
+                <Modal.Footer>
+                    <>
+                        <Button variant="secondary">Cancelar</Button>
+                        <Button variant="primary" onClick={() => updateEventProd(datosSel._id)}>Guardar</Button>
+                    </>
+                </Modal.Footer>
+            </Modal >
         </Container>
     )
 }
