@@ -37,9 +37,9 @@ export default function SupportProduct(props) {
     const [listProducts, setListProducts] = useState([]);
     useEffect(() => {
         getEventProd();
-    },[]);
+    }, []);
 
-    var getEventProd = async function(){
+    var getEventProd = async function () {
         let resp = await fetch("http://localhost:3001/api/products/",
             {
                 method: "GET"
@@ -66,10 +66,10 @@ export default function SupportProduct(props) {
             </tr>
         );
     }); */
-    
+
     //DELETE PRODUCT
-    var deleteEventProd = async function(id){
-        let resp = await fetch("http://localhost:3001/api/products/"+id,
+    var deleteEventProd = async function (id) {
+        let resp = await fetch("http://localhost:3001/api/products/" + id,
             {
                 method: "DELETE"
             }
@@ -77,7 +77,7 @@ export default function SupportProduct(props) {
         let auxResp = await resp.json();
         getEventProd();
         await MySwal.fire({
-            tittle: "<strong>"+auxResp.mssg+"</strong>",
+            tittle: "<strong>" + auxResp.mssg + "</strong>",
             html: (auxResp.status === 1) ? <i>Producto eliminado</i> : <i>ERROR</i>,
             icon: (auxResp.status === 1) ? 'success' : 'error'
         })
@@ -85,8 +85,8 @@ export default function SupportProduct(props) {
     };
 
     //Get ONE PRODUCT
-    var getEventOneProd = async function(id){
-        let resp = await fetch("http://localhost:3001/api/products/"+id,
+    var getEventOneProd = async function (id) {
+        let resp = await fetch("http://localhost:3001/api/products/" + id,
             {
                 method: "GET"
             }
@@ -113,13 +113,14 @@ export default function SupportProduct(props) {
         setMarca(marca);
         setType(type);
 
+        setShowUpdate(true);
         return;
     };
     //UPDATE PRODUCT
-    var updateEventProd = async function(id){
+    var updateEventProd = async function (id) {
         let myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
-        let resp = await fetch("http://localhost:3001/api/products/"+id,
+        let resp = await fetch("http://localhost:3001/api/products/" + id,
             {
                 method: "PUT",
                 headers: myHeaders,
@@ -136,11 +137,11 @@ export default function SupportProduct(props) {
                 )
             }
         );
-    
+
         let auxResp = await resp.json();
         getEventProd();
         await MySwal.fire({
-            tittle: "<strong>"+auxResp.mssg+"</strong>",
+            tittle: "<strong>" + auxResp.mssg + "</strong>",
             html: (auxResp.status === 1) ? <i>Producto modificado</i> : <i>ERROR</i>,
             icon: (auxResp.status === 1) ? 'success' : 'error'
         })
@@ -148,7 +149,7 @@ export default function SupportProduct(props) {
     };
 
     //ADD PRODUCT
-    var addEventProd = async function(){
+    var addEventProd = async function () {
         let myHeaders = new Headers();
         myHeaders.append('Content-Type', 'application/json');
         let resp = await fetch("http://localhost:3001/api/products/",
@@ -191,7 +192,7 @@ export default function SupportProduct(props) {
                         <FormControl id="code" />
 
                         <FormLabel> Nombre *</FormLabel>
-                        <FormControl id="name"/>
+                        <FormControl id="name" />
 
                         <FormLabel> Cantidad actual *</FormLabel>
                         <FormControl id="qty" type="number" />
@@ -218,8 +219,34 @@ export default function SupportProduct(props) {
             </Modal >
         )
     }
-    
-    function FormModalProductUpdate(props){
+
+
+    const [datosSel, setDatosSel] = useState({
+        _id: '',
+        code: '',
+        name: '',
+        qty: '',
+        price: '',
+        realPrice: '',
+        marca: '',
+        type: ''
+    })
+
+    const selcc = (e, c) => {
+        setDatosSel(e);
+        (c === 'edit') && setShowUpdate(true)
+    }
+
+    const handleChange = e => {
+        const { name, value } = e.target;
+        setDatosSel((prevState) => ({
+            ...prevState,
+            [name]: value
+        }))
+        console.log(datosSel);
+    }
+
+    /* function FormModalProductUpdate(props){
         return(
             <Modal {...props} className="modal" aria-labelledby="contained-modal-title-center">
             <Modal.Header closeButton>
@@ -257,10 +284,10 @@ export default function SupportProduct(props) {
             </Modal.Footer>
         </Modal >
         );
-    }
+    } */
 
     return (
-        
+
         <Container className="supportProduct">
             <Row>
                 <Col md={4} lg={4}>
@@ -276,7 +303,7 @@ export default function SupportProduct(props) {
             </Row>
             <Row className="justify-content-md-end">
                 <Col lg={11}>
-                    <Button className="mb-3 add-product" variant="light" onClick={() => {setShowAdd(true) }}>Nuevo Producto <FontAwesomeIcon className="icon-plus" icon={faPlus} /></Button>
+                    <Button className="mb-3 add-product" variant="light" onClick={() => { setShowAdd(true) }}>Nuevo Producto <FontAwesomeIcon className="icon-plus" icon={faPlus} /></Button>
                 </Col>
             </Row>
             <Row>
@@ -295,7 +322,7 @@ export default function SupportProduct(props) {
                                 <th>Eliminar</th>
                             </tr>
                         </thead>
-                        
+
                         <tbody>
                             {/* Segunda forma dinamica de datos
                                 {viewProducts} */}
@@ -310,16 +337,15 @@ export default function SupportProduct(props) {
                                     <td>{product.marca}</td>
                                     <td>{product.type}</td>
                                     <td>
-                                        <Button className="mb-3 add-product" variant="light" onClick={() => {
+                                        <Button className="mb-3 add-product" variant="light" /* onClick={() => {
                                             getEventOneProd(product._id);
-                                            setShowUpdate(true);
-                                        }}>
+                                        }} */ onClick={() => selcc(product, 'edit')}>
                                             ✏️
                                         </Button>
                                     </td>
                                     <td>
                                         <Button className="mb-3 add-product" variant="light" onClick={() => deleteEventProd(product._id)}>
-                                        <FontAwesomeIcon className="icon-trash" icon={faTrashAlt} />
+                                            <FontAwesomeIcon className="icon-trash" icon={faTrashAlt} />
                                         </Button>
                                     </td>
                                 </tr>
@@ -334,7 +360,7 @@ export default function SupportProduct(props) {
                 </Col>
             </Row>
 
-            
+
             <FormModalProduct
                 show={show}
                 onHide={() => setShow(false)}
